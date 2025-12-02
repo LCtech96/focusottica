@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-ocean-50 via-white to-sand-50 text-gray-900 antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-xl border border-white/20;
+  }
+  
+  .gradient-ocean {
+    @apply bg-gradient-to-br from-ocean-400 via-ocean-500 to-ocean-600;
+  }
+  
+  .gradient-sand {
+    @apply bg-gradient-to-br from-sand-200 via-sand-300 to-sand-400;
+  }
+  
+  .shadow-ios {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .shadow-ios-lg {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+}
+
