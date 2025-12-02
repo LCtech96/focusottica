@@ -20,13 +20,13 @@ export default function About() {
           {/* Text Content */}
           <div className="space-y-6">
             <p className="text-lg text-gray-700 leading-relaxed">
-              Siamo un'ottica storica nel cuore della Sicilia, con oltre <strong className="text-ocean-600">25 anni di esperienza</strong> nella cura della vista. 
-              La nostra passione per l'eccellenza e l'attenzione al dettaglio ci hanno reso un punto di riferimento 
+              Siamo un&apos;ottica storica nel cuore della Sicilia, con oltre <strong className="text-ocean-600">25 anni di esperienza</strong> nella cura della vista. 
+              La nostra passione per l&apos;eccellenza e l&apos;attenzione al dettaglio ci hanno reso un punto di riferimento 
               per migliaia di clienti soddisfatti.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed">
               Situati in una delle zone più belle della Sicilia, combiniamo la tradizione artigianale italiana 
-              con le tecnologie più avanzate nel campo dell'ottica. Ogni occhiale che vendiamo è scelto con cura 
+              con le tecnologie più avanzate nel campo dell&apos;ottica. Ogni occhiale che vendiamo è scelto con cura 
               e ogni montatura è personalizzata per il tuo stile e le tue esigenze.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed">
