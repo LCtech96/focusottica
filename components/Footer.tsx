@@ -99,9 +99,22 @@ export default function Footer() {
         {/* WhatsApp CTA */}
         <div className="border-t border-gray-700 pt-8 mt-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-gray-400 text-center md:text-left">
-              © {new Date().getFullYear()} Focus Ottica. Tutti i diritti riservati.
-            </p>
+            <div className="text-center md:text-left">
+              <p className="text-gray-400">
+                © {new Date().getFullYear()} Focus Ottica. Tutti i diritti riservati.
+              </p>
+              <p className="text-gray-500 text-sm mt-2">
+                Created by{' '}
+                <a
+                  href="https://facevoice.ai"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-ocean-400 hover:text-ocean-300 transition-colors font-medium"
+                >
+                  Facevoice.ai
+                </a>
+              </p>
+            </div>
             <button
               onClick={handleWhatsApp}
               className="flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#128C7E] transition-colors shadow-lg"
