@@ -37,11 +37,11 @@ export default function About() {
 
           {/* Image Card */}
           <div className="relative">
-            <div className="aspect-square rounded-3xl overflow-hidden shadow-ios-lg">
+            <div className="rounded-3xl overflow-hidden shadow-ios-lg">
               <img
                 src="/products/Chi-siamo.png"
                 alt="Focus Ottica - 25+ Anni di Esperienza"
-                className="w-full h-full object-cover"
+                className="w-full h-auto object-contain"
               />
             </div>
             <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-sand-200 rounded-full opacity-50 blur-2xl"></div>
