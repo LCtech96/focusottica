@@ -1,5 +1,5 @@
 -- Schema per Database Neon - Focus Ottica
--- Database: purple-thunder-58179640
+-- Per usare questo schema, eseguilo nel tuo progetto Neon tramite SQL Editor
 
 -- Tabella prodotti (occhiali)
 CREATE TABLE IF NOT EXISTS "products" (
