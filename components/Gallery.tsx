@@ -119,32 +119,25 @@ export default function Gallery() {
                 className="glass-effect rounded-3xl overflow-hidden shadow-ios hover:shadow-xl transition-all duration-300 hover:scale-105 group"
               >
                 <div className="relative aspect-square bg-white p-8">
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className="text-ocean-600 font-bold text-lg">focus</span>
-                    <span className="text-gray-800 text-sm block">OTTICA</span>
-                  </div>
-                  <div className="absolute top-4 right-4 z-10">
-                    <span className="text-gray-800 font-semibold text-lg">{product.brand}</span>
-                  </div>
                   <div className="w-full h-full flex items-center justify-center">
-                    {/* Placeholder per le immagini - da sostituire con Image component quando le immagini sono caricate */}
-                    <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center">
-                      <span className="text-gray-400 text-sm text-center px-4">
-                        {product.name}
-                      </span>
-                    </div>
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-contain"
+                      onError={(e) => {
+                        // Fallback to placeholder if image fails to load
+                        e.currentTarget.src = `https://placehold.co/600x600/e0f2fe/0c4a6e?text=${encodeURIComponent(product.name)}`
+                      }}
+                    />
                   </div>
                 </div>
                 <div className="p-6 bg-white/80 backdrop-blur-sm">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
                     {product.name}
                   </h3>
-                  <p className="text-gray-600 text-sm mb-4">
+                  <p className="text-gray-600 text-sm">
                     {product.description}
                   </p>
-                  <button className="w-full bg-ocean-600 text-white py-3 rounded-xl font-semibold hover:bg-ocean-700 transition-colors">
-                    Scopri di più
-                  </button>
                 </div>
               </div>
             ))}

@@ -2,9 +2,9 @@
 
 ## 📋 Informazioni Database
 
-- **Project Name:** purple-thunder-58179640
-- **Database URL:** `https://ep-royal-breeze-ahycwxpf.apirest.c-3.us-east-1.aws.neon.tech/neondb/rest/v1`
-- **Region:** AWS US East 1 (N. Virginia)
+⚠️ **IMPORTANTE: Non condividere mai le credenziali del database pubblicamente!**
+
+Le credenziali reali devono essere configurate solo nel file `.env.local` (che è già escluso da Git).
 
 ## 🔧 Setup Passo per Passo
 
@@ -14,26 +14,32 @@ Crea un file `.env.local` nella root del progetto con questo contenuto:
 
 ```env
 # Neon Database
-NEXT_PUBLIC_NEON_DATA_API_URL=https://ep-royal-breeze-ahycwxpf.apirest.c-3.us-east-1.aws.neon.tech/neondb/rest/v1
+NEXT_PUBLIC_NEON_DATA_API_URL=your_neon_database_url_here
 
 # Stack Auth (opzionale - per gestione utenti)
-NEXT_PUBLIC_STACK_PROJECT_ID=96a79480-5e10-401b-ae99-bc0ef664cef8
-NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=pck_64q2fecwsd2x3e981915fjdgmavp5hxjnmmyjhqpf0r90
+NEXT_PUBLIC_STACK_PROJECT_ID=your_stack_project_id_here
+NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=your_publishable_key_here
 ```
+
+**Dove trovare le credenziali:**
+- Vai su [console.neon.tech](https://console.neon.tech)
+- Seleziona il tuo progetto
+- Copia l'URL della Data API
+- Per Stack Auth, vai su [stack-auth.com](https://stack-auth.com) e copia le chiavi del tuo progetto
 
 ### 2. Crea lo Schema Database
 
 Vai su [console.neon.tech](https://console.neon.tech) e esegui lo script SQL che trovi in `database/schema.sql`.
 
 Oppure usa il Neon SQL Editor:
-1. Apri il progetto "purple-thunder-58179640"
+1. Apri il tuo progetto Neon
 2. Vai su "SQL Editor"
 3. Copia e incolla il contenuto di `database/schema.sql`
 4. Esegui lo script
 
 ### 3. Carica le Immagini dei Prodotti
 
-Hai ricevuto 9 immagini di occhiali Gucci. Salvale nella cartella `public/products/` con questi nomi:
+Salva le immagini degli occhiali nella cartella `public/products/` con questi nomi:
 
 - `gucci-1.jpg` - Occhiali esagonali oro
 - `gucci-2.jpg` - Occhiali rettangolari oro  
@@ -50,9 +56,15 @@ Hai ricevuto 9 immagini di occhiali Gucci. Salvale nella cartella `public/produc
 2. Rinominale secondo la lista sopra
 3. Mettile tutte in `public/products/`
 
-### 4. Aggiorna .gitignore
+### 4. Verifica .gitignore
 
 Assicurati che `.env.local` sia ignorato da Git (è già nel `.gitignore`).
+
+```gitignore
+# local env files
+.env*.local
+.env
+```
 
 ### 5. Testa in Locale
 
@@ -69,17 +81,18 @@ Quando fai il push su GitHub, aggiungi le variabili d'ambiente su Vercel:
 1. Vai su Vercel Dashboard
 2. Seleziona il progetto "focusottica"
 3. Settings → Environment Variables
-4. Aggiungi:
-   - `NEXT_PUBLIC_NEON_DATA_API_URL`
-   - (opzionale) Le altre variabili Stack Auth
+4. Aggiungi le stesse variabili che hai in `.env.local`
+
+⚠️ **Mai fare commit di file `.env.local` o credenziali!**
 
 ## 📝 Note Importanti
 
 - ✅ La gallery è già integrata nella homepage
 - ✅ Il menu di navigazione include la voce "Collezione"
-- ✅ Per ora usa dati statici, puoi connettere il database in seguito
+- ✅ Per ora usa placeholder temporanei per le immagini
 - ✅ Le immagini devono essere in formato JPG o PNG
 - ✅ Dimensione consigliata: 800x800px o superiore
+- 🔒 Tutte le credenziali devono essere in `.env.local`, MAI nel codice
 
 ## 🔄 Prossimi Passi (Opzionale)
 
@@ -94,10 +107,24 @@ Per ora, le immagini e i dati sono gestiti staticamente nel componente Gallery.
 
 **Problema:** Le immagini non si vedono
 - Soluzione: Controlla che i file siano in `public/products/` con i nomi corretti
+- Per ora vedrai placeholder colorati
 
 **Problema:** Build fallisce su Vercel
-- Soluzione: Aggiungi le variabili d'ambiente su Vercel
+- Soluzione: Aggiungi le variabili d'ambiente su Vercel Dashboard
 
 **Problema:** Database non risponde
 - Soluzione: Verifica che il progetto Neon sia attivo su console.neon.tech
 
+## 🔐 Sicurezza
+
+**IMPORTANTE:**
+- ✅ `.env.local` è già nel `.gitignore`
+- ❌ Mai fare commit di credenziali
+- ❌ Mai condividere URL del database pubblicamente
+- ✅ Usa variabili d'ambiente su Vercel per production
+- ✅ Rigenera le chiavi se sono state esposte pubblicamente
+
+Se hai accidentalmente fatto commit di credenziali:
+1. Rigenera immediatamente le chiavi su Neon e Stack Auth
+2. Aggiorna `.env.local` con le nuove credenziali
+3. Aggiorna le variabili d'ambiente su Vercel

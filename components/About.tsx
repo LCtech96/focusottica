@@ -35,16 +35,14 @@ export default function About() {
             </p>
           </div>
 
-          {/* Image Placeholder with ocean theme */}
+          {/* Image Card */}
           <div className="relative">
             <div className="aspect-square rounded-3xl overflow-hidden shadow-ios-lg">
-              <div className="w-full h-full bg-gradient-to-br from-ocean-400 via-ocean-500 to-sand-400 flex items-center justify-center">
-                <div className="text-center text-white p-8">
-                  <Award size={64} className="mx-auto mb-4 opacity-80" />
-                  <p className="text-2xl font-bold">25+ Anni</p>
-                  <p className="text-lg mt-2">di Esperienza</p>
-                </div>
-              </div>
+              <img
+                src="/products/Chi-siamo.png"
+                alt="Focus Ottica - 25+ Anni di Esperienza"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-sand-200 rounded-full opacity-50 blur-2xl"></div>
           </div>
