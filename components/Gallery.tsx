@@ -17,64 +17,64 @@ const products: Product[] = [
     id: 1,
     name: 'Occhiali Esagonali',
     brand: 'GUCCI',
-    image: '/products/gucci-1.jpg',
-    description: 'Montatura oro con lenti sfumate marrone'
+    image: '/products/gucci-2.jpg',
+    description: 'Elegante montatura dorata con forma esagonale e lenti gradient marrone'
   },
   {
     id: 2,
     name: 'Occhiali Rettangolari',
     brand: 'GUCCI',
-    image: '/products/gucci-2.jpg',
-    description: 'Montatura oro con lenti marroni'
+    image: '/products/gucci-3.jpg',
+    description: 'Montatura classica oro lucido con lenti marroni'
   },
   {
     id: 3,
-    name: 'Occhiali con Dettagli',
+    name: 'Occhiali Decorati',
     brand: 'GUCCI',
-    image: '/products/gucci-3.jpg',
-    description: 'Montatura oro con lenti viola chiaro'
+    image: '/products/gucci-4.jpg',
+    description: 'Raffinata montatura dorata con dettagli perlati e lenti lavanda'
   },
   {
     id: 4,
-    name: 'Occhiali Gatto Rosa',
+    name: 'Occhiali Cat-Eye Rosa',
     brand: 'GUCCI',
-    image: '/products/gucci-4.jpg',
-    description: 'Montatura trasparente rosa con lenti specchiate'
+    image: '/products/gucci-5.jpg',
+    description: 'Acetato trasparente rosa con lenti a specchio e logo GG'
   },
   {
     id: 5,
     name: 'Occhiali Shield',
     brand: 'GUCCI',
-    image: '/products/gucci-5.jpg',
-    description: 'Montatura argentata con lenti grigie'
+    image: '/products/gucci-6.jpg',
+    description: 'Design sportivo con montatura metallica e lenti grigie scure'
   },
   {
     id: 6,
     name: 'Occhiali Cat-Eye Neri',
     brand: 'GUCCI',
-    image: '/products/gucci-6.jpg',
-    description: 'Montatura nera con aste verdi marmorizzate'
+    image: '/products/gucci-7.jpg',
+    description: 'Montatura acetato nero lucido con aste in acetato verde marmorizzato'
   },
   {
     id: 7,
     name: 'Occhiali Quadrati',
     brand: 'GUCCI',
-    image: '/products/gucci-7.jpg',
-    description: 'Montatura nera con lenti ambra'
+    image: '/products/gucci-8.jpg',
+    description: 'Forma oversize in acetato nero con lenti ambra e logo laterale'
   },
   {
     id: 8,
     name: 'Occhiali Aviator',
     brand: 'GUCCI',
-    image: '/products/gucci-8.jpg',
-    description: 'Montatura oro con aste tartaruga'
+    image: '/products/gucci-9.jpg',
+    description: 'Stile aviator in metallo dorato con aste effetto tartaruga'
   },
   {
     id: 9,
-    name: 'Occhiali Bianchi',
+    name: 'Occhiali Marmorizzati',
     brand: 'GUCCI',
-    image: '/products/gucci-9.jpg',
-    description: 'Montatura bianca marmorizzata con lenti marroni'
+    image: '/products/gucci-10.jpg',
+    description: 'Acetato bianco marmorizzato con lenti marroni e logo dorato'
   }
 ]
 
