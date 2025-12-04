@@ -60,6 +60,12 @@ export default function Navigation() {
               Servizi
             </button>
             <button
+              onClick={() => scrollToSection('gallery')}
+              className="text-gray-700 hover:text-ocean-600 transition-colors font-medium"
+            >
+              Collezione
+            </button>
+            <button
               onClick={() => scrollToSection('contact')}
               className="bg-ocean-600 text-white px-6 py-2 rounded-full hover:bg-ocean-700 transition-all shadow-lg hover:shadow-xl"
             >
@@ -100,6 +106,12 @@ export default function Navigation() {
               Servizi
             </button>
             <button
+              onClick={() => scrollToSection('gallery')}
+              className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-ocean-50 rounded-lg transition-colors"
+            >
+              Collezione
+            </button>
+            <button
               onClick={() => scrollToSection('contact')}
               className="block w-full text-left px-4 py-2 bg-ocean-600 text-white rounded-lg hover:bg-ocean-700 transition-colors"
             >
@@ -111,6 +123,7 @@ export default function Navigation() {
     </nav>
   )
 }
+
 
 
 
