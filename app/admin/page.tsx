@@ -2,7 +2,12 @@ import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { AlertTriangle, ArrowRight, ImageIcon, ExternalLink, ScanFace } from 'lucide-react'
 import { GROUPS, TOTAL_WINDOWS, filledWindows, tryOnReadyWindows } from '@/lib/site-content'
-import { readContent, storageDriverName, usingBlobStorage } from '@/lib/storage'
+import {
+  readContent,
+  storageDriverName,
+  storageWriteBlocker,
+  usingBlobStorage,
+} from '@/lib/storage'
 import { SESSION_COOKIE, usingDefaultCredentials, verifySessionToken } from '@/lib/auth'
 import LogoutButton from '@/components/admin/LogoutButton'
 
@@ -13,6 +18,7 @@ export default async function AdminDashboard() {
   const session = await verifySessionToken(cookies().get(SESSION_COOKIE)?.value)
 
   const totalFilled = GROUPS.reduce((sum, group) => sum + filledWindows(content, group.id), 0)
+  const writeBlocker = storageWriteBlocker()
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -49,15 +55,24 @@ export default async function AdminDashboard() {
             </p>
           </div>
         )}
-        {!usingBlobStorage() && (
-          <div className="flex gap-3 bg-sky-50 border border-sky-200 text-sky-900 rounded-xl px-4 py-3 text-sm">
+        {writeBlocker ? (
+          <div className="flex gap-3 bg-red-50 border border-red-300 text-red-900 rounded-xl px-4 py-3 text-sm">
             <AlertTriangle size={18} className="flex-shrink-0 mt-0.5" />
             <p>
-              Archiviazione attuale: <strong>{storageDriverName()}</strong>. In produzione su Vercel
-              configura <code className="font-mono">BLOB_READ_WRITE_TOKEN</code>, altrimenti le foto
-              caricate vanno perse a ogni nuovo deploy.
+              <strong>Salvataggio non disponibile.</strong> {writeBlocker} Fino ad allora puoi
+              girare il pannello e vedere la struttura, ma ogni salvataggio darà errore.
             </p>
           </div>
+        ) : (
+          !usingBlobStorage() && (
+            <div className="flex gap-3 bg-sky-50 border border-sky-200 text-sky-900 rounded-xl px-4 py-3 text-sm">
+              <AlertTriangle size={18} className="flex-shrink-0 mt-0.5" />
+              <p>
+                Archiviazione attuale: <strong>{storageDriverName()}</strong>. Va bene in sviluppo;
+                in produzione su Vercel serve <code className="font-mono">BLOB_READ_WRITE_TOKEN</code>.
+              </p>
+            </div>
+          )
         )}
       </div>
 

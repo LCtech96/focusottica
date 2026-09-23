@@ -1,10 +1,18 @@
 import { NextResponse } from 'next/server'
-import { MAX_UPLOAD_BYTES, isAllowedImageType, saveUpload } from '@/lib/storage'
+import {
+  MAX_UPLOAD_BYTES,
+  isAllowedImageType,
+  saveUpload,
+  storageWriteBlocker,
+} from '@/lib/storage'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 export async function POST(request: Request) {
+  const blocker = storageWriteBlocker()
+  if (blocker) return NextResponse.json({ error: blocker }, { status: 503 })
+
   let formData: FormData
   try {
     formData = await request.formData()

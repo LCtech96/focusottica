@@ -48,6 +48,26 @@ export function storageDriverName(): string {
   return usingBlobStorage() ? 'Vercel Blob' : 'Filesystem locale'
 }
 
+/**
+ * Su Vercel il disco delle funzioni è di sola lettura (tranne /tmp): senza
+ * Vercel Blob il driver filesystem non può scrivere proprio nulla, quindi il
+ * pannello admin non riesce a salvare né foto né testi.
+ *
+ * Restituisce il motivo per cui il salvataggio non è possibile, oppure null
+ * se tutto è a posto. Serve a dare un messaggio chiaro invece di un errore 500.
+ */
+export function storageWriteBlocker(): string | null {
+  if (usingBlobStorage()) return null
+  if (process.env.VERCEL !== '1') return null
+
+  return (
+    'Il salvataggio è disattivato perché manca Vercel Blob. Su Vercel il disco ' +
+    'è di sola lettura, quindi senza Blob né le foto né i testi possono essere ' +
+    'salvati. Configura BLOB_READ_WRITE_TOKEN (Storage → Create Database → Blob) ' +
+    'e rifai il deploy.'
+  )
+}
+
 /* ------------------------------------------------------------------ */
 /* Contenuti                                                           */
 /* ------------------------------------------------------------------ */

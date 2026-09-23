@@ -130,12 +130,18 @@ Su Vercel: *Settings → Environment Variables*. In locale: file `.env.local`
 | `ADMIN_EMAIL` | consigliata | Email di accesso (default: `shop@otticafocus.com`) |
 | `ADMIN_PASSWORD` | **sì in produzione** | Password di accesso |
 | `AUTH_SECRET` | **sì in produzione** | Chiave con cui viene firmato il cookie di sessione. Una stringa casuale lunga: `openssl rand -base64 32` |
-| `BLOB_READ_WRITE_TOKEN` | **sì su Vercel** | Token di Vercel Blob, dove finiscono le foto caricate |
+| `BLOB_READ_WRITE_TOKEN` | **sì su Vercel** | Token di Vercel Blob, dove finiscono foto e testi |
 
 ### Perché `BLOB_READ_WRITE_TOKEN` è necessario su Vercel
 
-Su Vercel il disco delle funzioni è di sola lettura ed effimero: senza Vercel
-Blob le foto caricate dal pannello **vengono perse al deploy successivo**.
+Su Vercel il disco delle funzioni è **di sola lettura** (tranne `/tmp`). Senza
+Vercel Blob il pannello admin quindi **non riesce a salvare nulla**: né le foto
+né i testi. Non è una perdita di dati al deploy successivo — è proprio il
+salvataggio che non parte.
+
+Il sito pubblico continua a funzionare normalmente (mostra i contenuti di
+default) e il pannello resta navigabile, ma ogni *Salva e pubblica* risponde con
+un errore esplicito, e la dashboard mostra un avviso rosso.
 
 Attivazione: Vercel Dashboard → *Storage* → *Create Database* → **Blob** →
 collegalo al progetto. Vercel aggiunge la variabile da solo; poi fai un redeploy.

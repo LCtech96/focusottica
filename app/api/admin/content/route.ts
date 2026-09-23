@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { GROUPS_BY_ID, imageKeys, normalizeContent, type WindowItem } from '@/lib/site-content'
-import { readContent, writeContent } from '@/lib/storage'
+import { readContent, storageWriteBlocker, writeContent } from '@/lib/storage'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -16,6 +16,9 @@ export async function GET() {
  * Body: { groupId: string, heading?: {title, subtitle}, items: WindowItem[] }
  */
 export async function PUT(request: Request) {
+  const blocker = storageWriteBlocker()
+  if (blocker) return NextResponse.json({ error: blocker }, { status: 503 })
+
   let body: {
     groupId?: unknown
     heading?: { title?: unknown; subtitle?: unknown }
