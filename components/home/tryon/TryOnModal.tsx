@@ -148,19 +148,20 @@ export default function TryOnModal({ imageUrl, productName, brand, onClose }: Pr
           const faceRight = point(RIGHT_FACE_EDGE)
           const faceLeft = point(LEFT_FACE_EDGE)
 
-          const x1 = right.x
-          const y1 = right.y
-          const x2 = left.x
-          const y2 = left.y
+          // L'inclinazione va misurata su un vettore che punta verso destra
+          // dello schermo. Il canvas è specchiato, quindi l'occhio destro del
+          // viso finisce a destra dell'immagine: prendendo i punti nell'ordine
+          // sbagliato l'angolo vale ~180° e la montatura si disegna capovolta.
+          const [eyeStart, eyeEnd] = left.x <= right.x ? [left, right] : [right, left]
 
-          const eyeDistance = Math.hypot(x2 - x1, y2 - y1)
+          const eyeDistance = Math.hypot(eyeEnd.x - eyeStart.x, eyeEnd.y - eyeStart.y)
           const faceWidth = Math.hypot(faceLeft.x - faceRight.x, faceLeft.y - faceRight.y)
-          const angle = Math.atan2(y2 - y1, x2 - x1)
+          const angle = Math.atan2(eyeEnd.y - eyeStart.y, eyeEnd.x - eyeStart.x)
           const width = faceWidth * FACE_WIDTH_RATIO * scaleRef.current
           const height = width * (frame.naturalHeight / frame.naturalWidth)
 
-          const centerX = (x1 + x2) / 2
-          const centerY = (y1 + y2) / 2 + offsetYRef.current * eyeDistance
+          const centerX = (eyeStart.x + eyeEnd.x) / 2
+          const centerY = (eyeStart.y + eyeEnd.y) / 2 + offsetYRef.current * eyeDistance
 
           ctx.save()
           ctx.translate(centerX, centerY)

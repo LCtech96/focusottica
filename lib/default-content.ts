@@ -31,6 +31,7 @@ const seed = {
         },
         {
           image: '/products/gucci-5.jpg',
+          tryOnImage: '/products/tryon/gucci-5.png',
           eyebrow: 'Collezione sole',
           title: 'Protezione e stile, tutto l’anno',
           description:
@@ -50,6 +51,7 @@ const seed = {
         },
         {
           image: '/products/gucci-4.jpg',
+          tryOnImage: '/products/tryon/gucci-4.png',
           title: 'Occhiali da vista',
           description: 'Lenti su misura e montature per ogni forma di viso.',
           href: '#bestseller',
@@ -62,6 +64,7 @@ const seed = {
         },
         {
           image: '/products/gucci-6.jpg',
+          tryOnImage: '/products/tryon/gucci-6.png',
           title: 'Bambino',
           description: 'Montature resistenti e leggere, pensate per i più piccoli.',
           href: '#servizi',
@@ -114,6 +117,7 @@ const seed = {
         },
         {
           image: '/products/gucci-2.jpg',
+          tryOnImage: '/products/tryon/gucci-2.png',
           brand: 'GUCCI',
           name: 'Occhiali Rettangolari',
           description: 'Montatura oro con lenti marroni.',
@@ -122,6 +126,7 @@ const seed = {
         },
         {
           image: '/products/gucci-3.jpg',
+          tryOnImage: '/products/tryon/gucci-3.png',
           brand: 'GUCCI',
           name: 'Occhiali con Dettagli',
           description: 'Montatura oro con lenti viola chiaro.',
@@ -130,6 +135,7 @@ const seed = {
         },
         {
           image: '/products/gucci-4.jpg',
+          tryOnImage: '/products/tryon/gucci-4.png',
           brand: 'GUCCI',
           name: 'Occhiali Gatto Rosa',
           description: 'Montatura trasparente rosa con lenti specchiate.',
@@ -138,6 +144,7 @@ const seed = {
         },
         {
           image: '/products/gucci-5.jpg',
+          tryOnImage: '/products/tryon/gucci-5.png',
           brand: 'GUCCI',
           name: 'Occhiali Shield',
           description: 'Montatura argentata con lenti grigie.',
@@ -146,6 +153,7 @@ const seed = {
         },
         {
           image: '/products/gucci-6.jpg',
+          tryOnImage: '/products/tryon/gucci-6.png',
           brand: 'GUCCI',
           name: 'Occhiali Cat-Eye Neri',
           description: 'Montatura nera con aste verdi marmorizzate.',
@@ -213,6 +221,7 @@ const seed = {
       items: [
         {
           image: '/products/gucci-2.jpg',
+          tryOnImage: '/products/tryon/gucci-2.png',
           brand: 'GUCCI',
           name: 'Occhiali Rettangolari',
           description: 'Montatura oro con lenti marroni.',
@@ -221,6 +230,7 @@ const seed = {
         },
         {
           image: '/products/gucci-3.jpg',
+          tryOnImage: '/products/tryon/gucci-3.png',
           brand: 'GUCCI',
           name: 'Occhiali con Dettagli',
           description: 'Montatura oro con lenti viola chiaro.',
@@ -229,6 +239,7 @@ const seed = {
         },
         {
           image: '/products/gucci-4.jpg',
+          tryOnImage: '/products/tryon/gucci-4.png',
           brand: 'GUCCI',
           name: 'Occhiali Gatto Rosa',
           description: 'Montatura trasparente rosa con lenti specchiate.',
@@ -237,6 +248,7 @@ const seed = {
         },
         {
           image: '/products/gucci-5.jpg',
+          tryOnImage: '/products/tryon/gucci-5.png',
           brand: 'GUCCI',
           name: 'Occhiali Shield',
           description: 'Montatura argentata con lenti grigie.',
@@ -245,6 +257,7 @@ const seed = {
         },
         {
           image: '/products/gucci-6.jpg',
+          tryOnImage: '/products/tryon/gucci-6.png',
           brand: 'GUCCI',
           name: 'Occhiali Cat-Eye Neri',
           description: 'Montatura nera con aste verdi marmorizzate.',

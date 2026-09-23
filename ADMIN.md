@@ -80,11 +80,14 @@ non compare. Si attiva quindi un modello alla volta, con i tuoi tempi.
   software la scala sulla larghezza, quindi il margine bianco falsa la misura
 - Indicativamente 1000 × 400 px
 
-> **La frontalità è il punto critico.** Le foto di catalogo sono quasi sempre
-> scatti di tre quarti, con l'asta che sporge di lato. Sovrapposte a un viso le
-> due lenti si aprono a "V" e si vede che qualcosa non torna, e la prospettiva
-> non è correggibile a posteriori. Su nove foto del nostro catalogo, solo una
-> era abbastanza frontale (1° di inclinazione) da dare un risultato buono.
+> **La foto frontale resta la scelta migliore.** Da uno scatto frontale si
+> ricava una sovrapposizione fedele, senza ritocchi: è il caso del Dolce &
+> Gabbana in vetrina.
+>
+> Da uno scatto di tre quarti — il formato tipico dei cataloghi — si può
+> comunque ricavare qualcosa di presentabile specchiando il lato più vicino
+> all'obiettivo, ed è così che sono state preparate le montature Gucci. Quello
+> che si perde è la forma reale delle due lenti, che diventano identiche.
 >
 > Come scattarla bene, basta un telefono: montatura aperta appoggiata su un
 > foglio bianco, telefono **parallelo** al foglio, esattamente sopra, senza
