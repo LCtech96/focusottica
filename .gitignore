@@ -32,3 +32,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# contenuti e foto caricati dal pannello admin (driver filesystem)
+/data
