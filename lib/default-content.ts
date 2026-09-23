@@ -128,6 +128,7 @@ const seed = {
         },
         {
           image: '/products/gucci-8.jpg',
+          tryOnImage: '/products/tryon/gucci-8.png',
           brand: 'GUCCI',
           name: 'Occhiali Aviator',
           description: 'Montatura oro con aste tartaruga.',
@@ -226,6 +227,7 @@ const seed = {
         },
         {
           image: '/products/gucci-8.jpg',
+          tryOnImage: '/products/tryon/gucci-8.png',
           brand: 'GUCCI',
           name: 'Occhiali Aviator',
           description: 'Montatura oro con aste tartaruga.',

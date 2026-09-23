@@ -17,16 +17,19 @@ import { Camera, Loader2, RotateCcw, ShieldCheck, X } from 'lucide-react'
 const WASM_PATH = '/mediapipe/wasm'
 const MODEL_PATH = '/mediapipe/models/face_landmarker.task'
 
-/** Angoli esterni degli occhi nella topologia a 468 punti di MediaPipe. */
+/** Punti della topologia a 468 punti di MediaPipe. */
 const RIGHT_EYE_OUTER = 33
 const LEFT_EYE_OUTER = 263
+const RIGHT_FACE_EDGE = 234
+const LEFT_FACE_EDGE = 454
 
 /**
- * Rapporto tra la larghezza della montatura e la distanza fra gli angoli
- * esterni degli occhi. Su un viso adulto la distanza cantale esterna è
- * ~90 mm e una montatura ~135 mm: da qui il valore di partenza.
+ * La montatura si dimensiona sulla larghezza del viso, non sulla distanza fra
+ * gli occhi: un occhiale da sole arriva alle tempie, e commisurarlo agli occhi
+ * lo faceva uscire troppo stretto. I punti 234/454 stanno sul contorno del viso
+ * all'altezza degli zigomi, di poco più larghi della montatura.
  */
-const DEFAULT_WIDTH_RATIO = 1.5
+const FACE_WIDTH_RATIO = 0.95
 
 type Phase = 'consenso' | 'avvio' | 'attiva' | 'errore'
 
@@ -135,16 +138,25 @@ export default function TryOnModal({ imageUrl, productName, brand, onClose }: Pr
 
           // Le coordinate sono normalizzate 0..1 sul video non specchiato:
           // rifletto la x perché il canvas è specchiato.
-          const right = landmarks[RIGHT_EYE_OUTER]
-          const left = landmarks[LEFT_EYE_OUTER]
-          const x1 = (1 - right.x) * canvas.width
-          const y1 = right.y * canvas.height
-          const x2 = (1 - left.x) * canvas.width
-          const y2 = left.y * canvas.height
+          const point = (index: number) => ({
+            x: (1 - landmarks[index].x) * canvas.width,
+            y: landmarks[index].y * canvas.height,
+          })
+
+          const right = point(RIGHT_EYE_OUTER)
+          const left = point(LEFT_EYE_OUTER)
+          const faceRight = point(RIGHT_FACE_EDGE)
+          const faceLeft = point(LEFT_FACE_EDGE)
+
+          const x1 = right.x
+          const y1 = right.y
+          const x2 = left.x
+          const y2 = left.y
 
           const eyeDistance = Math.hypot(x2 - x1, y2 - y1)
+          const faceWidth = Math.hypot(faceLeft.x - faceRight.x, faceLeft.y - faceRight.y)
           const angle = Math.atan2(y2 - y1, x2 - x1)
-          const width = eyeDistance * DEFAULT_WIDTH_RATIO * scaleRef.current
+          const width = faceWidth * FACE_WIDTH_RATIO * scaleRef.current
           const height = width * (frame.naturalHeight / frame.naturalWidth)
 
           const centerX = (x1 + x2) / 2

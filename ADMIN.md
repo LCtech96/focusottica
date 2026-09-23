@@ -71,6 +71,16 @@ non compare. Si attiva quindi un modello alla volta, con i tuoi tempi.
   software la scala sulla larghezza, quindi il margine bianco falsa la misura
 - Indicativamente 1000 × 400 px
 
+> **La frontalità è il punto critico.** Le foto di catalogo sono quasi sempre
+> scatti di tre quarti, con l'asta che sporge di lato. Sovrapposte a un viso le
+> due lenti si aprono a "V" e si vede che qualcosa non torna, e la prospettiva
+> non è correggibile a posteriori. Su nove foto del nostro catalogo, solo una
+> era abbastanza frontale (1° di inclinazione) da dare un risultato buono.
+>
+> Come scattarla bene, basta un telefono: montatura aperta appoggiata su un
+> foglio bianco, telefono **parallelo** al foglio, esattamente sopra, senza
+> inclinazione. Poi si scontorna il fondo bianco.
+
 Nell'anteprima dell'admin questo slot ha lo sfondo a scacchi: se vedi il
 bianco invece degli scacchi, la foto **non** è trasparente e sul viso apparirà
 un rettangolo bianco.
