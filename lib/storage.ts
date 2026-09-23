@@ -22,15 +22,23 @@ import { DEFAULT_CONTENT } from './default-content'
 import { normalizeContent, type SiteContent } from './site-content'
 
 const CONTENT_PATHNAME = 'focusottica/site-content.json'
+const UPLOAD_PREFIX = 'focusottica/uploads/'
+
+/**
+ * Su Blob ogni file è salvato come `private` e servito dalla nostra route
+ * `/media/[file]`, mai con l'URL diretto dello store.
+ *
+ * Due motivi: funziona qualunque sia la modalità dello store (uno store
+ * "Private" non è tenuto ad accettare file pubblici), e le immagini restano
+ * sul nostro dominio — stessa origine, quindi la prova virtuale può anche
+ * salvare lo scatto senza inciampare nelle regole CORS del canvas.
+ */
+const BLOB_ACCESS = 'private' as const
 const DATA_FILE = path.join(process.cwd(), 'data', 'site-content.json')
 const UPLOAD_DIR = path.join(process.cwd(), 'data', 'uploads')
 
 /** Nome file generato da `saveUpload`, usato anche dalla route `/media/[file]`. */
 export const UPLOAD_FILENAME_PATTERN = /^[0-9a-f-]{36}\.(jpg|png|webp|avif|gif)$/
-
-export function uploadFilePath(filename: string): string {
-  return path.join(UPLOAD_DIR, filename)
-}
 
 export const CONTENT_TYPE_BY_EXTENSION: Record<string, string> = {
   jpg: 'image/jpeg',
@@ -86,7 +94,7 @@ export async function readContent(): Promise<SiteContent> {
   if (usingBlobStorage()) {
     try {
       const { get } = await import('@vercel/blob')
-      const result = await get(CONTENT_PATHNAME, { access: 'public', useCache: false })
+      const result = await get(CONTENT_PATHNAME, { access: BLOB_ACCESS, useCache: false })
       if (!result || result.statusCode !== 200) return freshDefaults()
       const text = await new Response(result.stream).text()
       return normalizeContent(JSON.parse(text))
@@ -112,7 +120,7 @@ export async function writeContent(content: SiteContent): Promise<SiteContent> {
   if (usingBlobStorage()) {
     const { put } = await import('@vercel/blob')
     await put(CONTENT_PATHNAME, body, {
-      access: 'public',
+      access: BLOB_ACCESS,
       contentType: 'application/json',
       addRandomSuffix: false,
       allowOverwrite: true,
@@ -153,15 +161,45 @@ export async function saveUpload(file: File): Promise<string> {
 
   if (usingBlobStorage()) {
     const { put } = await import('@vercel/blob')
-    const blob = await put(`focusottica/uploads/${filename}`, buffer, {
-      access: 'public',
+    await put(`${UPLOAD_PREFIX}${filename}`, buffer, {
+      access: BLOB_ACCESS,
       contentType: file.type,
       addRandomSuffix: false,
     })
-    return blob.url
+  } else {
+    await fs.mkdir(UPLOAD_DIR, { recursive: true })
+    await fs.writeFile(path.join(UPLOAD_DIR, filename), buffer)
   }
 
-  await fs.mkdir(UPLOAD_DIR, { recursive: true })
-  await fs.writeFile(path.join(UPLOAD_DIR, filename), buffer)
+  // Stessa forma di URL con entrambi i driver: se un giorno si cambia
+  // archiviazione, i contenuti già salvati continuano a puntare al posto giusto.
   return `/media/${filename}`
+}
+
+/** Foto caricata, pronta da servire. `body` è già utilizzabile come risposta. */
+export interface StoredUpload {
+  body: ReadableStream<Uint8Array> | Uint8Array
+  contentType: string
+}
+
+export async function readUpload(filename: string): Promise<StoredUpload | null> {
+  const extension = filename.split('.').pop() || ''
+  const fallbackType = CONTENT_TYPE_BY_EXTENSION[extension] || 'application/octet-stream'
+
+  if (usingBlobStorage()) {
+    const { get } = await import('@vercel/blob')
+    const result = await get(`${UPLOAD_PREFIX}${filename}`, {
+      access: BLOB_ACCESS,
+      useCache: true,
+    })
+    if (!result || result.statusCode !== 200) return null
+    return { body: result.stream, contentType: result.blob.contentType || fallbackType }
+  }
+
+  try {
+    const data = await fs.readFile(path.join(UPLOAD_DIR, filename))
+    return { body: new Uint8Array(data), contentType: fallbackType }
+  } catch {
+    return null
+  }
 }

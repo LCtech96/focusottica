@@ -144,7 +144,13 @@ default) e il pannello resta navigabile, ma ogni *Salva e pubblica* risponde con
 un errore esplicito, e la dashboard mostra un avviso rosso.
 
 Attivazione: Vercel Dashboard → *Storage* → *Create Database* → **Blob** →
-collegalo al progetto. Vercel aggiunge la variabile da solo; poi fai un redeploy.
+collegalo al progetto. Vercel aggiunge la variabile da solo; poi **fai un
+redeploy**, altrimenti il sito già online continua a girare senza il token.
+
+Lo store può essere indifferentemente **Private** o pubblico: salviamo i file
+come `private` e li serviamo dalla route `/media/[file]` del sito, mai con
+l'URL diretto dello store. Così le foto stanno sul vostro dominio e non
+dipendono dalla modalità scelta.
 
 Senza quel token il progetto usa il **filesystem locale** (`data/site-content.json`
 e `data/uploads/`), comodo in sviluppo o su un server Node tradizionale. Il

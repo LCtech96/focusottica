@@ -1,21 +1,20 @@
-import { promises as fs } from 'fs'
 import { NextResponse } from 'next/server'
-import {
-  CONTENT_TYPE_BY_EXTENSION,
-  UPLOAD_FILENAME_PATTERN,
-  uploadFilePath,
-} from '@/lib/storage'
+import { UPLOAD_FILENAME_PATTERN, readUpload } from '@/lib/storage'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 /**
- * Serve le foto caricate dal pannello admin quando si usa il driver
- * filesystem. Non si possono mettere in `public/`: Next.js costruisce
- * l'elenco dei file statici all'avvio e ignorerebbe quelli aggiunti dopo.
+ * Serve le foto caricate dal pannello admin, con entrambi i driver.
  *
- * Con Vercel Blob questa route non viene usata: le immagini hanno già
- * un URL pubblico sul CDN.
+ * Con Vercel Blob i file sono salvati come `private` e letti qui col token:
+ * così funzionano anche se lo store non serve file pubblici, e restano sul
+ * nostro dominio. Con il filesystem i file sono letti da `data/uploads/`,
+ * dove non possono stare in `public/` perché Next fissa l'elenco dei file
+ * statici all'avvio e ignorerebbe quelli caricati dopo.
+ *
+ * Il nome file è generato da noi (UUID + estensione) e viene validato prima
+ * di toccare l'archivio: nessun percorso arbitrario può passare di qui.
  */
 export async function GET(_request: Request, { params }: { params: { file: string } }) {
   const filename = params.file
@@ -25,16 +24,19 @@ export async function GET(_request: Request, { params }: { params: { file: strin
   }
 
   try {
-    const data = await fs.readFile(uploadFilePath(filename))
-    const extension = filename.split('.').pop() as string
+    const upload = await readUpload(filename)
+    if (!upload) return new NextResponse('Not found', { status: 404 })
 
-    return new NextResponse(new Uint8Array(data), {
+    return new NextResponse(upload.body as BodyInit, {
       headers: {
-        'Content-Type': CONTENT_TYPE_BY_EXTENSION[extension] || 'application/octet-stream',
+        'Content-Type': upload.contentType,
+        // Il nome file cambia a ogni caricamento, quindi il contenuto di un
+        // dato URL non cambia mai: si può mettere in cache per sempre.
         'Cache-Control': 'public, max-age=31536000, immutable',
       },
     })
-  } catch {
+  } catch (error) {
+    console.error('[media] lettura fallita:', error)
     return new NextResponse('Not found', { status: 404 })
   }
 }
