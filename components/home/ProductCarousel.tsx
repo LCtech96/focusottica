@@ -1,10 +1,11 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Media from './Media'
 import SectionHeading from './SectionHeading'
 import TryOnButton from './tryon/TryOnButton'
+import ProductModal from './ProductModal'
 import { TRY_ON_IMAGE_KEY, type GroupContent } from '@/lib/site-content'
 
 export default function ProductCarousel({
@@ -15,6 +16,7 @@ export default function ProductCarousel({
   content: GroupContent
 }) {
   const trackRef = useRef<HTMLDivElement>(null)
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   const scrollBy = (direction: number) => {
     const track = trackRef.current
@@ -66,7 +68,12 @@ export default function ProductCarousel({
                 </div>
               )}
 
-              <a href={item.href || '#contatti'} className="block">
+              <button
+                type="button"
+                onClick={() => setOpenIndex(index)}
+                className="block w-full text-left"
+                aria-label={`Apri la scheda di ${item.name || 'questo modello'}`}
+              >
                 <div className="aspect-square overflow-hidden bg-gray-100">
                   <Media
                     src={item.image}
@@ -90,11 +97,15 @@ export default function ProductCarousel({
                     </p>
                   )}
                 </div>
-              </a>
+              </button>
             </article>
           ))}
         </div>
       </div>
+
+      {openIndex !== null && content.items[openIndex] && (
+        <ProductModal item={content.items[openIndex]} onClose={() => setOpenIndex(null)} />
+      )}
     </section>
   )
 }
