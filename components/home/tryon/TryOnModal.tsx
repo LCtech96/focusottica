@@ -31,6 +31,172 @@ const LEFT_FACE_EDGE = 454
  */
 const FACE_WIDTH_RATIO = 0.95
 
+/**
+ * Quanto la lente scurisce ciò che ha dietro: 1 = tinta piena della foto,
+ * 0 = lente invisibile. Si schiarisce un po' la tinta originale perché nella
+ * foto di catalogo la lente è fotografata su fondo bianco e risulta più densa
+ * di come appare indossata.
+ */
+const LENS_STRENGTH = 0.82
+
+/* ------------------------------------------------------------------ */
+/* Lenti semitrasparenti                                               */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Erosione con finestra quadrata, separata in due passate da O(n).
+ * Fuori dall'immagine si considera sfondo, così l'erosione stringe anche
+ * dai bordi e la montatura che li tocca resta opaca.
+ */
+function erode(mask: Uint8Array, w: number, h: number, r: number): Uint8Array {
+  const horizontal = new Uint8Array(w * h)
+
+  for (let y = 0; y < h; y++) {
+    const row = y * w
+    const isBg = (x: number) => x < 0 || x >= w || mask[row + x] === 0
+    let background = 0
+    for (let x = -r; x <= r; x++) if (isBg(x)) background++
+    for (let x = 0; x < w; x++) {
+      horizontal[row + x] = background === 0 ? 1 : 0
+      if (isBg(x - r)) background--
+      if (isBg(x + r + 1)) background++
+    }
+  }
+
+  const result = new Uint8Array(w * h)
+  for (let x = 0; x < w; x++) {
+    const isBg = (y: number) => y < 0 || y >= h || horizontal[y * w + x] === 0
+    let background = 0
+    for (let y = -r; y <= r; y++) if (isBg(y)) background++
+    for (let y = 0; y < h; y++) {
+      result[y * w + x] = background === 0 ? 1 : 0
+      if (isBg(y - r)) background--
+      if (isBg(y + r + 1)) background++
+    }
+  }
+
+  return result
+}
+
+/** Sfocatura a media mobile, per ammorbidire il passaggio montatura/lente. */
+function boxBlur(src: Uint8Array, w: number, h: number, r: number): Uint8Array {
+  const horizontal = new Uint8Array(w * h)
+
+  for (let y = 0; y < h; y++) {
+    const row = y * w
+    const at = (x: number) => src[row + Math.min(w - 1, Math.max(0, x))]
+    let sum = 0
+    for (let x = -r; x <= r; x++) sum += at(x)
+    const span = 2 * r + 1
+    for (let x = 0; x < w; x++) {
+      horizontal[row + x] = sum / span
+      sum += at(x + r + 1) - at(x - r)
+    }
+  }
+
+  const result = new Uint8Array(w * h)
+  for (let x = 0; x < w; x++) {
+    const at = (y: number) => horizontal[Math.min(h - 1, Math.max(0, y)) * w + x]
+    let sum = 0
+    for (let y = -r; y <= r; y++) sum += at(y)
+    const span = 2 * r + 1
+    for (let y = 0; y < h; y++) {
+      result[y * w + x] = sum / span
+      sum += at(y + r + 1) - at(y - r)
+    }
+  }
+
+  return result
+}
+
+export interface FramePieces {
+  /** Le lenti, da disegnare in fusione "multiply": scuriscono senza coprire. */
+  lens: HTMLCanvasElement
+  /** Profilo, ponte e aste: si disegnano sopra, pieni. */
+  rim: HTMLCanvasElement
+}
+
+/**
+ * Separa la montatura in due strati: lenti e profilo.
+ *
+ * Le lenti vengono poi fuse in "multiply", che scurisce l'immagine sotto
+ * lasciandone i dettagli — è quello che fa una lente colorata vera, mentre
+ * una semplice semitrasparenza appiattisce tutto in un velo uniforme. Dietro
+ * si continuano quindi a intravedere gli occhi.
+ *
+ * Non serve riconoscere la lente: basta erodere la sagoma. Le parti sottili
+ * — profilo, ponte, terminali delle aste — spariscono con l'erosione e
+ * finiscono nello strato pieno; le superfici larghe, cioè le lenti,
+ * sopravvivono. Funziona quindi anche sulle foto caricate dal negozio, senza
+ * che nessuno debba ritagliare le lenti a mano.
+ */
+function prepareFrame(image: HTMLImageElement): FramePieces | null {
+  const w = image.naturalWidth
+  const h = image.naturalHeight
+  if (!w || !h) return null
+
+  const source = document.createElement('canvas')
+  source.width = w
+  source.height = h
+  const sourceCtx = source.getContext('2d', { willReadFrequently: true })
+  if (!sourceCtx) return null
+  sourceCtx.drawImage(image, 0, 0)
+
+  let picture: ImageData
+  try {
+    picture = sourceCtx.getImageData(0, 0, w, h)
+  } catch {
+    // Immagine di altra origine: il canvas non è leggibile. Si rinuncia alla
+    // separazione e la prova continua con la montatura piena.
+    return null
+  }
+
+  const pixels = picture.data
+  const shape = new Uint8Array(w * h)
+  for (let i = 0; i < shape.length; i++) shape[i] = pixels[i * 4 + 3] > 128 ? 1 : 0
+
+  const radius = Math.max(4, Math.round(w * 0.028))
+  const inside = erode(shape, w, h, radius)
+  // Il confine fra i due strati va sfumato, altrimenti si vede lo scalino.
+  const weight = boxBlur(
+    Uint8Array.from(inside, (v) => (v ? 255 : 0)),
+    w,
+    h,
+    Math.max(2, Math.round(radius * 0.4))
+  )
+
+  const lensData = new ImageData(w, h)
+  const rimData = new ImageData(w, h)
+
+  for (let i = 0; i < shape.length; i++) {
+    const o = i * 4
+    const alpha = pixels[o + 3]
+    const share = weight[i] / 255
+
+    // Strato lente: tinta schiarita, tanto più presente quanto si è "dentro"
+    for (let c = 0; c < 3; c++) {
+      lensData.data[o + c] = 255 - (255 - pixels[o + c]) * LENS_STRENGTH
+    }
+    lensData.data[o + 3] = alpha * share
+
+    // Strato profilo: il resto
+    for (let c = 0; c < 3; c++) rimData.data[o + c] = pixels[o + c]
+    rimData.data[o + 3] = alpha * (1 - share)
+  }
+
+  const lens = document.createElement('canvas')
+  lens.width = w
+  lens.height = h
+  lens.getContext('2d')?.putImageData(lensData, 0, 0)
+
+  const rim = document.createElement('canvas')
+  rim.width = w
+  rim.height = h
+  rim.getContext('2d')?.putImageData(rimData, 0, 0)
+
+  return { lens, rim }
+}
+
 type Phase = 'consenso' | 'avvio' | 'attiva' | 'errore'
 
 interface Props {
@@ -44,6 +210,8 @@ export default function TryOnModal({ imageUrl, productName, brand, onClose }: Pr
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const frameRef = useRef<HTMLImageElement | null>(null)
+  /** Montatura divisa in lenti e profilo: si prepara una volta sola. */
+  const preparedRef = useRef<FramePieces | null>(null)
   const landmarkerRef = useRef<{ detectForVideo: (v: HTMLVideoElement, t: number) => any; close: () => void } | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const rafRef = useRef<number | null>(null)
@@ -136,6 +304,11 @@ export default function TryOnModal({ imageUrl, productName, brand, onClose }: Pr
         if (landmarks && frame?.complete && frame.naturalWidth) {
           setFaceFound(true)
 
+          // Alla prima passata utile si separano lenti e profilo; se non è
+          // possibile si ripiega sull'immagine originale, lente piena.
+          if (!preparedRef.current) preparedRef.current = prepareFrame(frame)
+          const pieces = preparedRef.current
+
           // Le coordinate sono normalizzate 0..1 sul video non specchiato:
           // rifletto la x perché il canvas è specchiato.
           const point = (index: number) => ({
@@ -166,7 +339,14 @@ export default function TryOnModal({ imageUrl, productName, brand, onClose }: Pr
           ctx.save()
           ctx.translate(centerX, centerY)
           ctx.rotate(angle)
-          ctx.drawImage(frame, -width / 2, -height / 2, width, height)
+          if (pieces) {
+            ctx.globalCompositeOperation = 'multiply'
+            ctx.drawImage(pieces.lens, -width / 2, -height / 2, width, height)
+            ctx.globalCompositeOperation = 'source-over'
+            ctx.drawImage(pieces.rim, -width / 2, -height / 2, width, height)
+          } else {
+            ctx.drawImage(frame, -width / 2, -height / 2, width, height)
+          }
           ctx.restore()
         } else {
           setFaceFound(false)
@@ -412,7 +592,10 @@ export default function TryOnModal({ imageUrl, productName, brand, onClose }: Pr
               // richiesta con crossOrigin fallisce: si riprova senza. In quel
               // caso il canvas risulta "sporco" e lo scatto non è possibile,
               // ma la prova continua a funzionare.
-              if (!taintFallback) setTaintFallback(true)
+              if (!taintFallback) {
+                preparedRef.current = null
+                setTaintFallback(true)
+              }
             }}
           />
         </div>
