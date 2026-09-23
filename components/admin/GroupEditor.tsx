@@ -17,7 +17,8 @@ export default function GroupEditor({ group, initialContent }: Props) {
   const [heading, setHeading] = useState(initialContent.heading)
   const [items, setItems] = useState<WindowItem[]>(initialContent.items)
   const [status, setStatus] = useState<Status>({ type: 'idle' })
-  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null)
+  // "<indice finestra>:<chiave foto>", es. "2:tryOnImage"
+  const [uploadingIndex, setUploadingIndex] = useState<string | null>(null)
 
   function updateItem(index: number, key: string, value: string) {
     setItems((current) =>
@@ -26,8 +27,8 @@ export default function GroupEditor({ group, initialContent }: Props) {
     setStatus({ type: 'idle' })
   }
 
-  async function handleUpload(index: number, file: File) {
-    setUploadingIndex(index)
+  async function handleUpload(index: number, imageKey: string, file: File) {
+    setUploadingIndex(`${index}:${imageKey}`)
     setStatus({ type: 'idle' })
 
     try {
@@ -40,7 +41,7 @@ export default function GroupEditor({ group, initialContent }: Props) {
         setStatus({ type: 'error', message: data.error || 'Caricamento non riuscito.' })
         return
       }
-      updateItem(index, 'image', data.url)
+      updateItem(index, imageKey, data.url)
     } catch {
       setStatus({ type: 'error', message: 'Caricamento non riuscito. Controlla la connessione.' })
     } finally {
@@ -105,13 +106,31 @@ export default function GroupEditor({ group, initialContent }: Props) {
           </h2>
 
           <div className="grid md:grid-cols-[220px_1fr] gap-6">
-            <ImageSlot
-              value={item.image}
-              uploading={uploadingIndex === index}
-              optional={group.optionalImage}
-              onUpload={(file) => handleUpload(index, file)}
-              onClear={() => updateItem(index, 'image', '')}
-            />
+            <div className="space-y-5">
+              <ImageSlot
+                value={item.image}
+                uploading={uploadingIndex === `${index}:image`}
+                optional={group.optionalImage}
+                onUpload={(file) => handleUpload(index, 'image', file)}
+                onClear={() => updateItem(index, 'image', '')}
+              />
+
+              {(group.extraImages || []).map((extra) => (
+                <div key={extra.key} className="pt-5 border-t border-gray-200">
+                  <p className="text-sm font-medium text-gray-700 mb-1">{extra.label}</p>
+                  <p className="text-xs text-gray-500 mb-3 leading-relaxed">{extra.hint}</p>
+                  <ImageSlot
+                    value={item[extra.key] || ''}
+                    uploading={uploadingIndex === `${index}:${extra.key}`}
+                    optional
+                    checkered
+                    onUpload={(file) => handleUpload(index, extra.key, file)}
+                    onClear={() => updateItem(index, extra.key, '')}
+                  />
+                  <p className="text-xs text-gray-500 mt-2">{extra.recommendedSize}</p>
+                </div>
+              ))}
+            </div>
 
             <div className="space-y-4">
               {group.fields.map((field) => (
@@ -161,12 +180,15 @@ function ImageSlot({
   value,
   uploading,
   optional,
+  checkered,
   onUpload,
   onClear,
 }: {
   value: string
   uploading: boolean
   optional?: boolean
+  /** scacchiera di sfondo, per giudicare la trasparenza di un PNG */
+  checkered?: boolean
   onUpload: (file: File) => void
   onClear: () => void
 }) {
@@ -174,12 +196,28 @@ function ImageSlot({
 
   return (
     <div>
-      <div className="aspect-square w-full rounded-xl bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center">
+      <div
+        className="aspect-square w-full rounded-xl bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center"
+        style={
+          checkered
+            ? {
+                backgroundImage:
+                  'linear-gradient(45deg, #e5e7eb 25%, transparent 25%), linear-gradient(-45deg, #e5e7eb 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e7eb 75%), linear-gradient(-45deg, transparent 75%, #e5e7eb 75%)',
+                backgroundSize: '16px 16px',
+                backgroundPosition: '0 0, 0 8px, 8px -8px, -8px 0px',
+              }
+            : undefined
+        }
+      >
         {uploading ? (
           <LoaderCircle size={28} className="animate-spin text-gray-400" />
         ) : value ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={value} alt="Anteprima" className="w-full h-full object-cover" />
+          <img
+            src={value}
+            alt="Anteprima"
+            className={`w-full h-full ${checkered ? 'object-contain' : 'object-cover'}`}
+          />
         ) : (
           <div className="text-center text-gray-400 px-3">
             <ImageIcon size={28} className="mx-auto mb-2" />

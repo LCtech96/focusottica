@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
-import { AlertTriangle, ArrowRight, ImageIcon, ExternalLink } from 'lucide-react'
-import { GROUPS, TOTAL_WINDOWS, filledWindows } from '@/lib/site-content'
+import { AlertTriangle, ArrowRight, ImageIcon, ExternalLink, ScanFace } from 'lucide-react'
+import { GROUPS, TOTAL_WINDOWS, filledWindows, tryOnReadyWindows } from '@/lib/site-content'
 import { readContent, storageDriverName, usingBlobStorage } from '@/lib/storage'
 import { SESSION_COOKIE, usingDefaultCredentials, verifySessionToken } from '@/lib/auth'
 import LogoutButton from '@/components/admin/LogoutButton'
@@ -80,6 +80,7 @@ export default async function AdminDashboard() {
       <div className="grid md:grid-cols-2 gap-5">
         {GROUPS.map((group) => {
           const filled = filledWindows(content, group.id)
+          const tryOnReady = group.extraImages ? tryOnReadyWindows(content, group.id) : null
           const items = content.groups[group.id]?.items || []
 
           return (
@@ -118,6 +119,15 @@ export default async function AdminDashboard() {
                   </>
                 )}
               </div>
+
+              {tryOnReady !== null && (
+                <div className="flex items-center gap-2 mt-2 text-sm">
+                  <ScanFace size={16} className="text-gray-400" />
+                  <span className={tryOnReady > 0 ? 'text-green-700' : 'text-gray-500'}>
+                    {tryOnReady} con prova virtuale attiva
+                  </span>
+                </div>
+              )}
 
               {/* Anteprime */}
               <div className="flex gap-2 mt-4 overflow-hidden">

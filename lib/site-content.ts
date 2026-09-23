@@ -18,6 +18,32 @@ export interface FieldDef {
   placeholder?: string
 }
 
+/**
+ * Finestra foto aggiuntiva di un gruppo, oltre a quella principale.
+ * Usata per la foto della prova virtuale: serve un PNG ritagliato della
+ * montatura, diverso dalla foto vetrina del prodotto.
+ */
+export interface ExtraImageDef {
+  key: string
+  label: string
+  hint: string
+  ratio: string
+  recommendedSize: string
+}
+
+export const TRY_ON_IMAGE_KEY = 'tryOnImage'
+
+const TRY_ON_IMAGE: ExtraImageDef = {
+  key: TRY_ON_IMAGE_KEY,
+  label: 'Foto per la prova virtuale',
+  hint:
+    'PNG con sfondo trasparente: solo la montatura, vista frontale e dritta, ' +
+    'con le aste ripiegate o tagliate. Senza questa foto il pulsante “Provali” ' +
+    'non compare per questo modello.',
+  ratio: 'Orizzontale, montatura centrata',
+  recommendedSize: '1000 × 400 px, PNG trasparente',
+}
+
 export type GroupLayout =
   | 'slider'
   | 'tiles'
@@ -48,6 +74,8 @@ export interface GroupDef {
   recommendedSize: string
   /** true se l'immagine è facoltativa (il blocco funziona anche senza) */
   optionalImage?: boolean
+  /** finestre foto aggiuntive, sempre facoltative */
+  extraImages?: ExtraImageDef[]
   /** campi testo di ogni finestra */
   fields: FieldDef[]
   /** titolo/sottotitolo della sezione, modificabili da admin */
@@ -104,13 +132,14 @@ export const GROUPS: GroupDef[] = [
   {
     id: 'novita',
     label: 'Novità della settimana',
-    hint: 'Carosello di prodotti nuovi in negozio. Otto finestre foto con brand, modello, descrizione e prezzo.',
+    hint: 'Carosello di prodotti nuovi in negozio. Otto finestre con foto vetrina, brand, modello, descrizione, prezzo e foto per la prova virtuale.',
     position: '3ª sezione',
     layout: 'products',
     windows: 8,
     ratio: '1:1 (quadrata)',
     recommendedSize: '1000 × 1000 px',
     heading: { title: 'Novità della settimana', subtitle: 'Gli arrivi più recenti nel nostro negozio' },
+    extraImages: [TRY_ON_IMAGE],
     fields: productFields,
   },
   {
@@ -149,13 +178,14 @@ export const GROUPS: GroupDef[] = [
   {
     id: 'bestseller',
     label: 'I più venduti',
-    hint: 'Secondo carosello prodotti, identico per struttura a "Novità della settimana".',
+    hint: 'Secondo carosello prodotti, identico per struttura a "Novità della settimana", prova virtuale inclusa.',
     position: '6ª sezione',
     layout: 'products',
     windows: 8,
     ratio: '1:1 (quadrata)',
     recommendedSize: '1000 × 1000 px',
     heading: { title: 'I più venduti', subtitle: 'I modelli preferiti dai nostri clienti' },
+    extraImages: [TRY_ON_IMAGE],
     fields: productFields,
   },
   {
@@ -262,8 +292,14 @@ export interface SiteContent {
   groups: Record<string, GroupContent>
 }
 
+/** Tutte le chiavi immagine di un gruppo: la principale più le aggiuntive. */
+export function imageKeys(group: GroupDef): string[] {
+  return ['image', ...(group.extraImages || []).map((extra) => extra.key)]
+}
+
 function emptyItem(group: GroupDef): WindowItem {
   const item: WindowItem = { image: '' }
+  for (const key of imageKeys(group)) item[key] = ''
   for (const field of group.fields) item[field.key] = ''
   return item
 }
@@ -280,7 +316,10 @@ export function normalizeContent(raw: Partial<SiteContent> | null | undefined): 
       const savedItem = saved?.items?.[i]
       const item = emptyItem(group)
       if (savedItem) {
-        item.image = typeof savedItem.image === 'string' ? savedItem.image : ''
+        for (const key of imageKeys(group)) {
+          const value = savedItem[key]
+          item[key] = typeof value === 'string' ? value : ''
+        }
         for (const field of group.fields) {
           const value = savedItem[field.key]
           item[field.key] = typeof value === 'string' ? value : ''
@@ -301,6 +340,11 @@ export function normalizeContent(raw: Partial<SiteContent> | null | undefined): 
   }
 
   return { updatedAt: raw?.updatedAt || new Date(0).toISOString(), groups }
+}
+
+/** Numero di finestre con la foto della prova virtuale caricata. */
+export function tryOnReadyWindows(content: SiteContent, groupId: string): number {
+  return (content.groups[groupId]?.items || []).filter((item) => !!item[TRY_ON_IMAGE_KEY]).length
 }
 
 /** Numero di finestre con foto caricata, per gruppo. */

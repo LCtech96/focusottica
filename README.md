@@ -9,6 +9,7 @@ Sito web per Focus Ottica, ottica storica di Castellammare del Golfo (TP) con 25
 - Tailwind CSS
 - Lucide React (icone)
 - Vercel Blob (archiviazione delle foto caricate dal pannello admin)
+- MediaPipe Face Landmarker (prova virtuale degli occhiali, in-browser)
 
 ## Installazione
 
@@ -58,9 +59,25 @@ il pannello admin genera l'elenco dei gruppi modificabili.
 Foto e descrizioni si caricano da `/admin`, senza toccare il codice.
 Istruzioni complete, credenziali e configurazione: **[ADMIN.md](ADMIN.md)**.
 
+## Prova virtuale
+
+Nei caroselli prodotti, ogni modello con una **foto per la prova virtuale**
+(PNG trasparente della sola montatura) mostra il pulsante *Provali*: il
+cliente si vede gli occhiali addosso usando la fotocamera.
+
+Il riconoscimento del viso gira interamente nel browser tramite MediaPipe Face
+Landmarker compilato in WebAssembly. **Il video non viene inviato a nessun
+server**, e motore e modello sono serviti dal nostro dominio
+(`public/mediapipe/`, ~16 MB), quindi non c'è nessuna richiesta a terze parti.
+Il modello viene scaricato solo al primo clic su *Provali*, non all'apertura
+del sito.
+
+Dettagli operativi e testo per l'informativa privacy: **[ADMIN.md](ADMIN.md)**.
+
 ## Caratteristiche
 
 - Struttura e-commerce con slider, caroselli prodotti, griglia brand e lookbook
+- Prova virtuale degli occhiali via webcam, senza servizi esterni
 - Pannello admin per caricare foto e descrizioni di ogni finestra
 - Integrazione social media (Facebook, Instagram)
 - Pulsanti WhatsApp per contatti diretti

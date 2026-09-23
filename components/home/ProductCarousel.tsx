@@ -4,7 +4,8 @@ import { useRef } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Media from './Media'
 import SectionHeading from './SectionHeading'
-import type { GroupContent } from '@/lib/site-content'
+import TryOnButton from './tryon/TryOnButton'
+import { TRY_ON_IMAGE_KEY, type GroupContent } from '@/lib/site-content'
 
 export default function ProductCarousel({
   id,
@@ -52,8 +53,19 @@ export default function ProductCarousel({
           {content.items.map((item, index) => (
             <article
               key={index}
-              className="snap-start flex-shrink-0 w-[65%] sm:w-[38%] lg:w-[23%] group"
+              className="relative snap-start flex-shrink-0 w-[65%] sm:w-[38%] lg:w-[23%] group"
             >
+              {/* Fuori dal link: un pulsante dentro un <a> non sarebbe HTML valido */}
+              {item[TRY_ON_IMAGE_KEY] && (
+                <div className="absolute left-3 top-3 z-10">
+                  <TryOnButton
+                    imageUrl={item[TRY_ON_IMAGE_KEY]}
+                    productName={item.name || 'Occhiali'}
+                    brand={item.brand}
+                  />
+                </div>
+              )}
+
               <a href={item.href || '#contatti'} className="block">
                 <div className="aspect-square overflow-hidden bg-gray-100">
                   <Media

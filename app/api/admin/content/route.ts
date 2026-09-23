@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
-import { GROUPS_BY_ID, normalizeContent, type WindowItem } from '@/lib/site-content'
+import { GROUPS_BY_ID, imageKeys, normalizeContent, type WindowItem } from '@/lib/site-content'
 import { readContent, writeContent } from '@/lib/storage'
 
 export const runtime = 'nodejs'
@@ -39,7 +39,7 @@ export async function PUT(request: Request) {
   }
 
   // Si accettano solo le chiavi previste dallo schema del gruppo.
-  const allowedKeys = new Set(['image', ...group.fields.map((f) => f.key)])
+  const allowedKeys = new Set([...imageKeys(group), ...group.fields.map((f) => f.key)])
   const items: WindowItem[] = []
 
   for (let i = 0; i < group.windows; i++) {
