@@ -68,6 +68,30 @@ const seed = {
         },
       ],
     },
+    sole: {
+      items: [
+        {
+          image: '/products/gucci-8.jpg',
+          tryOnImage: '/products/tryon/gucci-8.png',
+          brand: 'GUCCI',
+          name: 'Occhiali Aviator',
+          description:
+            'Montatura oro con aste tartaruga. Linea classica, adatta alla maggior parte dei visi.',
+          price: '470',
+          href: '',
+        },
+        {
+          image: '/products/gucci-9.jpg',
+          tryOnImage: '/products/tryon/gucci-9.png',
+          brand: 'GUCCI',
+          name: 'Occhiali Bianchi',
+          description:
+            'Montatura bianca marmorizzata con lenti marroni. Volume deciso, per chi vuole farsi notare.',
+          price: '450',
+          href: '',
+        },
+      ],
+    },
     novita: {
       items: [
         {

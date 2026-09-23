@@ -1,6 +1,7 @@
 import { Facebook, Instagram, Mail, MapPin, Phone } from 'lucide-react'
 
 const QUICK_LINKS = [
+  { label: 'Occhiali da sole', href: '#sole' },
   { label: 'Novità della settimana', href: '#novita' },
   { label: 'Categorie', href: '#categorie' },
   { label: 'I più venduti', href: '#bestseller' },

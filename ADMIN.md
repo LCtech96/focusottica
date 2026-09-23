@@ -25,22 +25,23 @@ La sessione dura 8 ore, poi viene chiesto di nuovo il login.
 
 ## 2. Come funziona
 
-La home page è composta da **11 gruppi di finestre**, per un totale di
-**55 finestre foto**. Ogni gruppo corrisponde a una sezione del sito:
+La home page è composta da **12 gruppi di finestre**, per un totale di
+**57 finestre foto**. Ogni gruppo corrisponde a una sezione del sito:
 
 | # | Gruppo | Finestre | Cosa contiene ogni finestra |
 |---|--------|----------|------------------------------|
 | 1 | Hero — Slider principale | 3 | foto + etichetta, titolo, descrizione, pulsante |
 | 2 | Categorie in evidenza | 4 | foto + titolo, descrizione, link |
-| 3 | Novità della settimana | 8 | foto + brand, modello, descrizione, prezzo + **foto prova virtuale** |
-| 4 | Brand partner | 12 | logo + nome brand |
-| 5 | Editoriale doppio | 2 | foto + etichetta, titolo, descrizione, pulsante |
-| 6 | I più venduti | 8 | foto + brand, modello, descrizione, prezzo + **foto prova virtuale** |
-| 7 | Banner a tutta larghezza | 1 | foto + etichetta, titolo, descrizione, pulsante |
-| 8 | Scegli per forma | 6 | foto + nome forma, descrizione |
-| 9 | Lookbook / Community | 6 | foto + didascalia |
-| 10 | Servizi e garanzie | 4 | foto facoltativa + titolo, descrizione, icona |
-| 11 | Newsletter / Appuntamento | 1 | foto + titolo, descrizione, pulsante |
+| 3 | **Occhiali da sole — Prova virtuale** | 2 | foto + brand, modello, descrizione, prezzo + **foto prova virtuale** |
+| 4 | Novità della settimana | 8 | foto + brand, modello, descrizione, prezzo + **foto prova virtuale** |
+| 5 | Brand partner | 12 | logo + nome brand |
+| 6 | Editoriale doppio | 2 | foto + etichetta, titolo, descrizione, pulsante |
+| 7 | I più venduti | 8 | foto + brand, modello, descrizione, prezzo + **foto prova virtuale** |
+| 8 | Banner a tutta larghezza | 1 | foto + etichetta, titolo, descrizione, pulsante |
+| 9 | Scegli per forma | 6 | foto + nome forma, descrizione |
+| 10 | Lookbook / Community | 6 | foto + didascalia |
+| 11 | Servizi e garanzie | 4 | foto facoltativa + titolo, descrizione, icona |
+| 12 | Newsletter / Appuntamento | 1 | foto + titolo, descrizione, pulsante |
 
 La **dashboard** (`/admin`) elenca tutti i gruppi in ordine di apparizione, con il
 numero di finestre, quante hanno già una foto e le miniature.
@@ -57,8 +58,16 @@ Il formato consigliato di ogni gruppo è indicato in cima alla sua pagina.
 
 ## 3. Prova virtuale ("Provali")
 
-Nei due caroselli prodotti ogni finestra ha, sotto la foto principale, un
-secondo slot: **Foto per la prova virtuale**. Se lo compili, sulla scheda di
+La sezione **Occhiali da sole**, quella che si apre dal menu (☰ → *Occhiali da
+sole*), è la vetrina principale della prova virtuale: due montature affiancate,
+entrambe con un pulsante *Provali* grande sotto il prezzo. È il posto giusto per
+i modelli che volete far provare davvero, perché sono visibili senza scorrere.
+
+Anche nei due caroselli prodotti ogni finestra ha, sotto la foto principale, un
+secondo slot: **Foto per la prova virtuale**. Lì però la scheda può finire in
+fondo a una fila da scorrere, quindi si notano meno.
+
+In tutti i casi vale la stessa regola: Se lo compili, sulla scheda di
 quel modello compare il pulsante **Provali**; se lo lasci vuoto, il pulsante
 non compare. Si attiva quindi un modello alla volta, con i tuoi tempi.
 

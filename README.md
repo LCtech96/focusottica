@@ -36,19 +36,20 @@ npm start
 ## Struttura della home page
 
 La home page segue l'impianto di un e-commerce di occhiali ed è composta da
-**11 gruppi di finestre** foto, per un totale di **55 finestre**:
+**12 gruppi di finestre** foto, per un totale di **57 finestre**:
 
 1. Hero — slider principale (3 finestre)
 2. Categorie in evidenza (4)
-3. Novità della settimana (8)
-4. Brand partner (12)
-5. Editoriale doppio (2)
-6. I più venduti (8)
-7. Banner a tutta larghezza (1)
-8. Scegli per forma (6)
-9. Lookbook / Community (6)
-10. Servizi e garanzie (4)
-11. Newsletter / Appuntamento (1)
+3. Occhiali da sole — prova virtuale (2)
+4. Novità della settimana (8)
+5. Brand partner (12)
+6. Editoriale doppio (2)
+7. I più venduti (8)
+8. Banner a tutta larghezza (1)
+9. Scegli per forma (6)
+10. Lookbook / Community (6)
+11. Servizi e garanzie (4)
+12. Newsletter / Appuntamento (1)
 
 Tutti i gruppi sono descritti in un unico file, [`lib/site-content.ts`](lib/site-content.ts):
 è la sorgente di verità da cui la home page prende la propria struttura e da cui
@@ -61,9 +62,11 @@ Istruzioni complete, credenziali e configurazione: **[ADMIN.md](ADMIN.md)**.
 
 ## Prova virtuale
 
-Nei caroselli prodotti, ogni modello con una **foto per la prova virtuale**
-(PNG trasparente della sola montatura) mostra il pulsante *Provali*: il
-cliente si vede gli occhiali addosso usando la fotocamera.
+La sezione **Occhiali da sole** (menu ☰ → *Occhiali da sole*, ancora `#sole`) è
+la vetrina della funzione: due montature affiancate, entrambe con un pulsante
+*Provali* in evidenza. Anche nei caroselli prodotti ogni modello con una **foto
+per la prova virtuale** (PNG trasparente della sola montatura) mostra lo stesso
+pulsante: il cliente si vede gli occhiali addosso usando la fotocamera.
 
 Il riconoscimento del viso gira interamente nel browser tramite MediaPipe Face
 Landmarker compilato in WebAssembly. **Il video non viene inviato a nessun

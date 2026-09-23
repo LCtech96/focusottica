@@ -47,6 +47,7 @@ const TRY_ON_IMAGE: ExtraImageDef = {
 export type GroupLayout =
   | 'slider'
   | 'tiles'
+  | 'sunglasses'
   | 'products'
   | 'logos'
   | 'editorial'
@@ -130,10 +131,29 @@ export const GROUPS: GroupDef[] = [
     ],
   },
   {
+    id: 'sole',
+    label: 'Occhiali da sole — Prova virtuale',
+    hint:
+      'La sezione che si apre dal menu alla voce “Occhiali da sole”: due montature ' +
+      'in evidenza, entrambe provabili dal vivo con la fotocamera. Carica la foto ' +
+      'per la prova virtuale su entrambe, altrimenti il pulsante “Provali” non compare.',
+    position: '3ª sezione',
+    layout: 'sunglasses',
+    windows: 2,
+    ratio: '1:1 (quadrata)',
+    recommendedSize: '1200 × 1200 px',
+    heading: {
+      title: 'Occhiali da sole',
+      subtitle: 'Provali subito dal telefono, poi vieni a vederli in negozio',
+    },
+    extraImages: [TRY_ON_IMAGE],
+    fields: productFields,
+  },
+  {
     id: 'novita',
     label: 'Novità della settimana',
     hint: 'Carosello di prodotti nuovi in negozio. Otto finestre con foto vetrina, brand, modello, descrizione, prezzo e foto per la prova virtuale.',
-    position: '3ª sezione',
+    position: '4ª sezione',
     layout: 'products',
     windows: 8,
     ratio: '1:1 (quadrata)',
@@ -146,7 +166,7 @@ export const GROUPS: GroupDef[] = [
     id: 'brand',
     label: 'Brand partner',
     hint: 'Striscia con i loghi dei marchi trattati. Usa immagini con sfondo trasparente (PNG).',
-    position: '4ª sezione',
+    position: '5ª sezione',
     layout: 'logos',
     windows: 12,
     ratio: 'Libero (orizzontale)',
@@ -162,7 +182,7 @@ export const GROUPS: GroupDef[] = [
     id: 'editoriale',
     label: 'Editoriale doppio',
     hint: 'Due grandi riquadri affiancati con foto, titolo e testo di approfondimento.',
-    position: '5ª sezione',
+    position: '6ª sezione',
     layout: 'editorial',
     windows: 2,
     ratio: '4:5 (verticale)',
@@ -179,7 +199,7 @@ export const GROUPS: GroupDef[] = [
     id: 'bestseller',
     label: 'I più venduti',
     hint: 'Secondo carosello prodotti, identico per struttura a "Novità della settimana", prova virtuale inclusa.',
-    position: '6ª sezione',
+    position: '7ª sezione',
     layout: 'products',
     windows: 8,
     ratio: '1:1 (quadrata)',
@@ -192,7 +212,7 @@ export const GROUPS: GroupDef[] = [
     id: 'banner',
     label: 'Banner a tutta larghezza',
     hint: 'Una sola immagine panoramica con messaggio promozionale e pulsante.',
-    position: '7ª sezione',
+    position: '8ª sezione',
     layout: 'banner',
     windows: 1,
     ratio: '21:9 (panoramica)',
@@ -209,7 +229,7 @@ export const GROUPS: GroupDef[] = [
     id: 'forme',
     label: 'Scegli per forma',
     hint: 'Sei riquadri con le forme di montatura (rotonda, quadrata, cat-eye…).',
-    position: '8ª sezione',
+    position: '9ª sezione',
     layout: 'shapes',
     windows: 6,
     ratio: '1:1 (quadrata)',
@@ -225,7 +245,7 @@ export const GROUPS: GroupDef[] = [
     id: 'lookbook',
     label: 'Lookbook / Community',
     hint: 'Griglia di sei foto in stile Instagram: clienti, vetrine, dettagli del negozio.',
-    position: '9ª sezione',
+    position: '10ª sezione',
     layout: 'lookbook',
     windows: 6,
     ratio: '1:1 (quadrata)',
@@ -240,7 +260,7 @@ export const GROUPS: GroupDef[] = [
     id: 'servizi',
     label: 'Servizi e garanzie',
     hint: 'Quattro riquadri con i servizi del negozio. La foto è facoltativa: senza foto viene mostrata un’icona.',
-    position: '10ª sezione',
+    position: '11ª sezione',
     layout: 'services',
     windows: 4,
     ratio: '1:1 (quadrata)',
@@ -257,7 +277,7 @@ export const GROUPS: GroupDef[] = [
     id: 'newsletter',
     label: 'Newsletter / Appuntamento',
     hint: 'Una sola immagine di sfondo per la fascia finale con invito al contatto.',
-    position: '11ª sezione',
+    position: '12ª sezione',
     layout: 'newsletter',
     windows: 1,
     ratio: '16:6 (panoramica)',

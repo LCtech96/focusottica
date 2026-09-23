@@ -5,7 +5,7 @@ import { Menu, X, Phone, MapPin, Search } from 'lucide-react'
 
 const LINKS = [
   { label: 'Novità', href: '#novita' },
-  { label: 'Occhiali da sole', href: '#categorie' },
+  { label: 'Occhiali da sole', href: '#sole' },
   { label: 'Occhiali da vista', href: '#bestseller' },
   { label: 'Brand', href: '#brand' },
   { label: 'Forme', href: '#forme' },
