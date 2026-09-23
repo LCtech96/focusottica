@@ -71,6 +71,16 @@ const seed = {
     sole: {
       items: [
         {
+          image: '/products/dg4533.jpg',
+          tryOnImage: '/products/tryon/dg4533.png',
+          brand: 'DOLCE & GABBANA',
+          name: 'DG4533 501/8G',
+          description:
+            'Montatura nera in acetato, forma tondeggiante con accenno cat-eye. Lenti sfumate grigio-marrone.',
+          price: '',
+          href: '',
+        },
+        {
           image: '/products/gucci-8.jpg',
           tryOnImage: '/products/tryon/gucci-8.png',
           brand: 'GUCCI',

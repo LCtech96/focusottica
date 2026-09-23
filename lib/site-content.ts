@@ -134,12 +134,12 @@ export const GROUPS: GroupDef[] = [
     id: 'sole',
     label: 'Occhiali da sole — Prova virtuale',
     hint:
-      'La sezione che si apre dal menu alla voce “Occhiali da sole”: due montature ' +
-      'in evidenza, entrambe provabili dal vivo con la fotocamera. Carica la foto ' +
-      'per la prova virtuale su entrambe, altrimenti il pulsante “Provali” non compare.',
+      'La sezione che si apre dal menu alla voce “Occhiali da sole”: le montature ' +
+      'in evidenza, provabili dal vivo con la fotocamera. Senza la foto per la ' +
+      'prova virtuale il pulsante “Provali” non compare su quella finestra.',
     position: '3ª sezione',
     layout: 'sunglasses',
-    windows: 2,
+    windows: 3,
     ratio: '1:1 (quadrata)',
     recommendedSize: '1200 × 1200 px',
     heading: {
