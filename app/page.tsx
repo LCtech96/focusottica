@@ -1,3 +1,4 @@
+import WorkInProgressBanner from '@/components/home/WorkInProgressBanner'
 import TopBar from '@/components/home/TopBar'
 import SiteHeader from '@/components/home/SiteHeader'
 import HeroSlider from '@/components/home/HeroSlider'
@@ -24,6 +25,8 @@ export default async function Home() {
 
   return (
     <main id="top" className="min-h-screen bg-white">
+      {/* Richiesto dal titolare: resta finché non chiede lui di toglierlo. */}
+      <WorkInProgressBanner />
       <TopBar />
       <SiteHeader />
 
