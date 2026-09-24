@@ -117,6 +117,45 @@ export interface FramePieces {
 }
 
 /**
+ * Ricostruisce la lente come gradiente pulito, togliendo le aste.
+ *
+ * Nelle foto di catalogo la montatura è aperta e le aste, dietro le lenti, si
+ * intravedono come striature scure: sovrapposte a un viso finirebbero davanti
+ * agli occhi, dove non hanno senso. La lente però è un gradiente
+ * sostanzialmente verticale, quindi riga per riga il colore è quasi costante e
+ * la mediana lo descrive bene anche con le aste presenti, che occupano una
+ * minoranza dei pixel. Assegnando a ogni riga la propria mediana si ottiene la
+ * lente senza le striature.
+ */
+function rebuildLens(
+  pixels: Uint8ClampedArray,
+  inside: Uint8Array,
+  w: number,
+  h: number
+): Uint8ClampedArray {
+  const result = new Uint8ClampedArray(pixels)
+  const columns: number[] = []
+  const channel: number[] = []
+
+  for (let y = 0; y < h; y++) {
+    columns.length = 0
+    for (let x = 0; x < w; x++) if (inside[y * w + x]) columns.push(x)
+    if (columns.length < 10) continue
+
+    const middle = columns.length >> 1
+    for (let c = 0; c < 3; c++) {
+      channel.length = 0
+      for (const x of columns) channel.push(pixels[(y * w + x) * 4 + c])
+      channel.sort((a, b) => a - b)
+      const median = channel[middle]
+      for (const x of columns) result[(y * w + x) * 4 + c] = median
+    }
+  }
+
+  return result
+}
+
+/**
  * Separa la montatura in due strati: lenti e profilo.
  *
  * Le lenti vengono poi fuse in "multiply", che scurisce l'immagine sotto
@@ -157,6 +196,7 @@ function prepareFrame(image: HTMLImageElement): FramePieces | null {
 
   const radius = Math.max(4, Math.round(w * 0.028))
   const inside = erode(shape, w, h, radius)
+  const lensColour = rebuildLens(pixels, inside, w, h)
   // Il confine fra i due strati va sfumato, altrimenti si vede lo scalino.
   const weight = boxBlur(
     Uint8Array.from(inside, (v) => (v ? 255 : 0)),
@@ -173,9 +213,10 @@ function prepareFrame(image: HTMLImageElement): FramePieces | null {
     const alpha = pixels[o + 3]
     const share = weight[i] / 255
 
-    // Strato lente: tinta schiarita, tanto più presente quanto si è "dentro"
+    // Strato lente: tinta ricostruita e schiarita, tanto più presente
+    // quanto si è "dentro"
     for (let c = 0; c < 3; c++) {
-      lensData.data[o + c] = 255 - (255 - pixels[o + c]) * LENS_STRENGTH
+      lensData.data[o + c] = 255 - (255 - lensColour[o + c]) * LENS_STRENGTH
     }
     lensData.data[o + 3] = alpha * share
 

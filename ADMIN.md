@@ -97,6 +97,16 @@ Nell'anteprima dell'admin questo slot ha lo sfondo a scacchi: se vedi il
 bianco invece degli scacchi, la foto **non** è trasparente e sul viso apparirà
 un rettangolo bianco.
 
+**Di due cose non devi preoccuparti**, perché le sistema il sito da solo:
+
+- *le aste che si intravedono dietro le lenti* nelle foto a montatura aperta
+  vengono tolte, ricostruendo il gradiente della lente;
+- *le lenti* vengono rese semitrasparenti, così chi prova gli occhiali si vede
+  gli occhi attraverso la lente.
+
+Conta invece che lo **scontorno sia pulito**: se attorno alla montatura resta
+un alone dell'ombra, quello finisce sul viso come una macchia chiara.
+
 ### Come funziona per il cliente
 
 Apre il pulsante *Provali*, legge l'avviso, autorizza la fotocamera e si vede
