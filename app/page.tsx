@@ -1,4 +1,4 @@
-import WorkInProgressBanner from '@/components/home/WorkInProgressBanner'
+import SiteGate from '@/components/home/SiteGate'
 import TopBar from '@/components/home/TopBar'
 import SiteHeader from '@/components/home/SiteHeader'
 import HeroSlider from '@/components/home/HeroSlider'
@@ -25,26 +25,34 @@ export default async function Home() {
 
   return (
     <main id="top" className="min-h-screen bg-white">
-      {/* Richiesto dal titolare: resta finché non chiede lui di toglierlo. */}
-      <WorkInProgressBanner />
-      <TopBar />
-      <SiteHeader />
+      {/*
+        Schermata di blocco richiesta dal titolare: resta finché non chiede lui
+        di toglierla. Il sito sotto è volutamente inerte — niente clic, niente
+        lettura da parte degli screen reader — così resta visibile ma non
+        utilizzabile. Vedi components/home/SiteGate.tsx.
+      */}
+      <SiteGate />
 
-      {/* 1 */} <HeroSlider items={groups.hero.items} />
-      {/* 2 */} <CategoryTiles content={groups.categorie} />
-      {/* 3 */} <SunglassesShowcase content={groups.sole} />
-      {/* 4 */} <ProductCarousel id="novita" content={groups.novita} />
-      {/* 5 */} <BrandStrip content={groups.brand} />
-      {/* 6 */} <EditorialDuo content={groups.editoriale} />
-      {/* 7 */} <ProductCarousel id="bestseller" content={groups.bestseller} />
-      {/* 8 */} <FullBanner content={groups.banner} />
-      {/* 9 */} <ShapeGrid content={groups.forme} />
-      {/* 10 */} <Lookbook content={groups.lookbook} />
-      {/* 11 */} <ServiceStrip content={groups.servizi} />
-      {/* 12 */} <NewsletterBand content={groups.newsletter} />
+      <div aria-hidden="true" className="pointer-events-none select-none">
+        <TopBar />
+        <SiteHeader />
 
-      <SiteFooter />
-      <WhatsAppFloat />
+        {/* 1 */} <HeroSlider items={groups.hero.items} />
+        {/* 2 */} <CategoryTiles content={groups.categorie} />
+        {/* 3 */} <SunglassesShowcase content={groups.sole} />
+        {/* 4 */} <ProductCarousel id="novita" content={groups.novita} />
+        {/* 5 */} <BrandStrip content={groups.brand} />
+        {/* 6 */} <EditorialDuo content={groups.editoriale} />
+        {/* 7 */} <ProductCarousel id="bestseller" content={groups.bestseller} />
+        {/* 8 */} <FullBanner content={groups.banner} />
+        {/* 9 */} <ShapeGrid content={groups.forme} />
+        {/* 10 */} <Lookbook content={groups.lookbook} />
+        {/* 11 */} <ServiceStrip content={groups.servizi} />
+        {/* 12 */} <NewsletterBand content={groups.newsletter} />
+
+        <SiteFooter />
+        <WhatsAppFloat />
+      </div>
     </main>
   )
 }
